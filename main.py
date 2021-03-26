@@ -7,6 +7,7 @@ import threading
 from dotenv import load_dotenv
 
 from umami.get.post import Post
+from umami.get.list import List
 
 load_dotenv()
 USER = os.getenv('API_USER')
@@ -16,14 +17,13 @@ FAVOURITES = os.getenv('FAV_URL')
 BASE_URL = 'https://e621.net'
 
 def get_listing(s, calls = 1):
+	
 	print("Getting listing")
-	r = s.get(FAVOURITES + "&limit=30")
+	r = List.Search(s, "fav:tsundereyandere")
 
 	posts = []
-	for post in r.json()["posts"]:
+	for post in r["posts"]:
 		posts.append(Post(post))
-
-	print(posts[0].id, posts[0].tags.general)
 
 def login():
 	s = requests.Session()
