@@ -17,19 +17,22 @@ FAVOURITES = os.getenv('FAV_URL')
 BASE_URL = 'https://e621.net'
 
 def get_listing(s, calls = 1):
-	
-	print("Getting listing")
-	r = List.Search(s, "fav:tsundereyandere")
+        
+        print("Getting listing")
+        limit = input()
+        r = List.Search(s, "fav:tsundereyandere", limit)
 
-	posts = []
-	for post in r["posts"]:
-		posts.append(Post(post))
+        posts = []
+
+        for post in r["posts"]:
+            print(post)
+            posts.append(Post(post))
 
 def login():
-	s = requests.Session()
-	s.auth = (USER, KEY)
-	s.headers.update({'User-Agent': 'API wrapper (github.com/0xyukine)'})
-	get_listing(s)
+        s = requests.Session()
+        s.auth = (USER, KEY)
+        s.headers.update({'User-Agent': 'API wrapper (github.com/0xyukine)'})
+        get_listing(s)
 
 print("Program currently assumes user has a .env file for username, API key, and favourites URL")
 print("Will break currently without the presence of a .env file")
