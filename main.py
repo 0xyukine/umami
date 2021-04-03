@@ -16,7 +16,7 @@ FAVOURITES = os.getenv('FAV_URL')
 
 BASE_URL = 'https://e621.net'
 
-def get_listing(s, calls = 1):
+def get_listing(s, search, calls = 1):
         
         print("Getting listing")
         limit = input()
@@ -25,14 +25,38 @@ def get_listing(s, calls = 1):
         posts = []
 
         for post in r["posts"]:
-            print(post)
             posts.append(Post(post))
+
+        print(posts[0].id)
+
+def neutral(s):
+    while True:
+        print("Enter 0 to quit or searchterm")
+        inp = input()
+        if inp == "0":
+            sys.exit()
+        else:
+            get_listing(s, search)
 
 def login():
         s = requests.Session()
-        s.auth = (USER, KEY)
+        try:
+            load_dotenv()
+            USER = os.getenv('API_USER')
+            KEY = os.getenv('API_KEY')
+        except:
+            print("dotenv module not installed or issue with .env file")
+            print("Enter details manually? Declining will continue without logging in? (Y/N)")
+            inp = input()
+            if inp == "Y":
+                print("Username:")
+                USER = input()
+                print("API key:")
+                KEY = input()
+                s.auth = (USER, KEY)
+
         s.headers.update({'User-Agent': 'API wrapper (github.com/0xyukine)'})
-        get_listing(s)
+        neutral(s)
 
 print("Program currently assumes user has a .env file for username, API key, and favourites URL")
 print("Will break currently without the presence of a .env file")
