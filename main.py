@@ -19,15 +19,13 @@ BASE_URL = 'https://e621.net'
 def get_listing(s, search, calls = 1):
         
         print("Getting listing")
-        limit = input()
-        r = List.Search(s, "fav:tsundereyandere", limit)
-
+        page_limit = int(input())
+        limit = int(input())
         posts = []
 
-        for post in r["posts"]:
-            posts.append(Post(post))
-
-        print(posts[0].id)
+        for r in List.Search(s, "fav:tsundereyandere", page_limit, limit):
+            for post in r["posts"]:
+                posts.append(Post(post))
 
 def neutral(s):
     while True:
@@ -36,7 +34,7 @@ def neutral(s):
         if inp == "0":
             sys.exit()
         else:
-            get_listing(s, search)
+            get_listing(s, inp)
 
 def login():
         s = requests.Session()
